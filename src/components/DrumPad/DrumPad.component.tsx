@@ -2,27 +2,28 @@ import { useEffect } from "react";
 
 import "./DrumPad.styles.scss";
 
-interface Props {
-  letter: string;
-  src: string;
-  label: string;
-  changeDisplayMessage: Function;
-  keyPressed: string;
-}
+import { Props, Event } from "./interfaces";
 
-const DrumPad = ({ label, src, letter, changeDisplayMessage, keyPressed }: Props) => {
+const DrumPad = ({ label, src, letter, changeDisplayMessage }: Props) => {
   const audio = new Audio(src);
 
   const pressButton = () => {
+    audio.currentTime = 0;
     audio.play();
     changeDisplayMessage(label);
   };
 
-  useEffect(() => {
-    if (keyPressed === letter.toLowerCase()) {
+  const onKeyPress = (e: Event) => {
+    if (e.key === letter.toLowerCase()) {
       pressButton();
     }
-  }, [keyPressed]);
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", onKeyPress);
+
+    return () => window.removeEventListener("keydown", onKeyPress);
+  }, []);
 
   return (
     <div id={label} className='drum-pad' onClick={pressButton}>
