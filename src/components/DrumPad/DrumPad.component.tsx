@@ -11,6 +11,10 @@ const DrumPad = ({ label, src, letter, changeDisplayMessage }: Props) => {
     audio.currentTime = 0;
     audio.play();
     changeDisplayMessage(label);
+    document.getElementById(label)?.classList.add("pressed");
+    setTimeout(() => {
+      document.getElementById(label)?.classList.remove("pressed");
+    }, 100);
   };
 
   const onKeyPress = (e: Event) => {
